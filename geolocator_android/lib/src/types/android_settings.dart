@@ -17,6 +17,7 @@ class AndroidSettings extends LocationSettings {
     Duration? timeLimit,
     this.foregroundNotificationConfig,
     this.useMSLAltitude = false,
+    this.gpsToNetwork = false,
   }) : super(
             accuracy: accuracy,
             distanceFilter: distanceFilter,
@@ -73,6 +74,11 @@ class AndroidSettings extends LocationSettings {
   ///
   /// Defaults to false
   final bool useMSLAltitude;
+  
+  /// In some device like xiaomi, can not get location when provider is gps, so set this flag to use network when provider is gps.
+  /// 
+  /// Defaults to false
+  final bool gpsToNetwork;
 
   @override
   Map<String, dynamic> toJson() {
@@ -82,6 +88,7 @@ class AndroidSettings extends LocationSettings {
         'timeInterval': intervalDuration?.inMilliseconds,
         'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
         'useMSLAltitude': useMSLAltitude,
+        'gpsToNetwork': gpsToNetwork,
       });
   }
 }

@@ -162,6 +162,7 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
     long timeInterval = 0;
     float distanceFilter = 0;
     @LocationRequestCompat.Quality int quality = LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY;
+    boolean gpsToNetwork = false;
 
     if (this.locationOptions != null) {
       distanceFilter = locationOptions.getDistanceFilter();
@@ -170,9 +171,14 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
           ? LocationRequestCompat.PASSIVE_INTERVAL
           : locationOptions.getTimeInterval();
       quality = accuracyToQuality(accuracy);
+      gpsToNetwork = locationOptions.isGpsToNetwork();
     }
 
     this.currentLocationProvider = determineProvider(this.locationManager, accuracy);
+
+    if (gpsToNetwork && this.currentLocationProvider == LocationManager.GPS_PROVIDER) {
+        this.currentLocationProvider = LocationManager.NETWORK_PROVIDER;
+    }
 
     if (this.currentLocationProvider == null) {
       errorCallback.onError(ErrorCodes.locationServicesDisabled);
